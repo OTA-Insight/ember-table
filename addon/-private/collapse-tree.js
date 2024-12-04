@@ -103,13 +103,15 @@ export const TableRowMeta = EmberObject.extend({
         return false;
       }
 
-      if (selectionMatchFunction) {
-        return rowValue.children.some(child =>
-          selection.some(item => selectionMatchFunction(item, child))
-        );
-      }
+      let matchFunction = (selection, item) => {
+        if (selectionMatchFunction) {
+          return selection.some(selectionItem => selectionMatchFunction(selectionItem, item));
+        }
 
-      return rowValue.children.some(child => selection.includes(child));
+        return selection.includes(item);
+      };
+
+      return rowValue.children.some(child => matchFunction(selection, child));
     }
   ),
 
