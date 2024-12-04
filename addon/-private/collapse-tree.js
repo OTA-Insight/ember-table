@@ -113,7 +113,7 @@ export const TableRowMeta = EmberObject.extend({
 
       return rowValue.children.some(child => {
         let childRowMeta = get(this, '_tree.rowMetaCache').get(child);
-        let isChildIndeterminate = childRowMeta.isGroupIndeterminate;
+        let isChildIndeterminate = !!childRowMeta?.isGroupIndeterminate;
 
         return isItemSelected(selection, child) || isChildIndeterminate;
       });
