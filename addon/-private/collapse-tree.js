@@ -103,7 +103,7 @@ export const TableRowMeta = EmberObject.extend({
         return false;
       }
 
-      let matchFunction = (selection, item) => {
+      let isItemSelected = (selection, item) => {
         if (selectionMatchFunction) {
           return selection.some(selectionItem => selectionMatchFunction(selectionItem, item));
         }
@@ -111,7 +111,12 @@ export const TableRowMeta = EmberObject.extend({
         return selection.includes(item);
       };
 
-      return rowValue.children.some(child => matchFunction(selection, child));
+      return rowValue.children.some(child => {
+        let childRowMeta = get(this, '_tree.rowMetaCache').get(child);
+        let isChildIndeterminate = childRowMeta.isGroupIndeterminate;
+
+        return isItemSelected(selection, child) || isChildIndeterminate;
+      });
     }
   ),
 
