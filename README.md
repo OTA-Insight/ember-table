@@ -9,6 +9,7 @@ This fork of ember-table is used by Lighthouse where the following changes have 
 | https://github.com/OTA-Insight/ember-table/pull/1/ | Add ability to customise the row selection and row collapsing/expanding   |
 | https://github.com/OTA-Insight/ember-table/pull/3/ | Change the order of the collapse/expand button and the selection checkbox |
 | https://github.com/OTA-Insight/ember-table/pull/4/ | Fix min and maxWidth not being respected when gte-container-slack is used |
+| https://github.com/OTA-Insight/ember-table/pull/5/ | Add indeterminate state to root rows when a child is selected             |
 
 # Ember Table
 
@@ -42,6 +43,7 @@ Newer versions are used to support Ember >= 3.28
 - Handles transient state at cell level.
 - Single, multiple row selection.
 - Table grouping.
+- Root row indeterminate state
 
 ## Documentation
 

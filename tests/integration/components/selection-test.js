@@ -483,6 +483,69 @@ module('Integration | selection', () => {
         assert.ok(row.isSelected, 'the row is selected');
         assert.ok(!row.checkbox.isChecked, 'the row checkbox is checked');
       });
+
+      test('Selecting a child row causes parent checkbox to be indeterminate', async function(assert) {
+        await generateTable(this, { rowCount: 3, rowDepth: 2 });
+
+        let parentRow = table.rows.objectAt(0);
+        let childRow = table.rows.objectAt(1);
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(!parentRow.isGroupIndeterminate, 'parent row is not indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(!parentRow.checkbox.isIndeterminate, 'parent row checkbox is not indeterminate');
+
+        assert.ok(!childRow.isSelected, 'child row is not selected');
+
+        await childRow.checkbox.click();
+
+        assert.ok(childRow.isSelected, 'child row is selected');
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(parentRow.isGroupIndeterminate, 'parent row is indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(parentRow.checkbox.isIndeterminate, 'parent row checkbox is indeterminate');
+      });
+
+      test('Selecting a child of a child row causes the parent checkbox to be indeterminate', async function(assert) {
+        await generateTable(this, { rowCount: 5, rowDepth: 3 });
+
+        let parentRow = table.rows.objectAt(0);
+        let childRow = table.rows.objectAt(1);
+        let grandchildRow = table.rows.objectAt(2);
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(!parentRow.isGroupIndeterminate, 'parent row is not indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(!parentRow.checkbox.isIndeterminate, 'parent row checkbox is not indeterminate');
+
+        assert.ok(!childRow.isSelected, 'child row is not selected');
+        assert.ok(!childRow.isGroupIndeterminate, 'child row is not indeterminate');
+
+        assert.ok(!childRow.checkbox.isChecked, 'child row checkbox is not checked');
+        assert.ok(!childRow.checkbox.isIndeterminate, 'child row checkbox is not indeterminate');
+
+        assert.ok(!grandchildRow.isSelected, 'grandchild row is not selected');
+
+        await grandchildRow.checkbox.click();
+
+        assert.ok(grandchildRow.isSelected, 'grandchild row is selected');
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(parentRow.isGroupIndeterminate, 'parent row is indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(parentRow.checkbox.isIndeterminate, 'parent row checkbox is indeterminate');
+
+        assert.ok(!childRow.isSelected, 'child row is not selected');
+        assert.ok(childRow.isGroupIndeterminate, 'child row is indeterminate');
+
+        assert.ok(!childRow.checkbox.isChecked, 'child row checkbox is not checked');
+        assert.ok(childRow.checkbox.isIndeterminate, 'child row checkbox is indeterminate');
+      });
     });
 
     componentModule('single', function() {
@@ -531,6 +594,69 @@ module('Integration | selection', () => {
         await generateTable(this, { checkboxSelectionMode: 'single' });
 
         await table.selectRow(0);
+      });
+
+      test('Selecting a child row causes parent checkbox to be indeterminate', async function(assert) {
+        await generateTable(this, { rowCount: 3, rowDepth: 2, checkboxSelectionMode: 'single' });
+
+        let parentRow = table.rows.objectAt(0);
+        let childRow = table.rows.objectAt(1);
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(!parentRow.isGroupIndeterminate, 'parent row is not indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(!parentRow.checkbox.isIndeterminate, 'parent row checkbox is not indeterminate');
+
+        assert.ok(!childRow.isSelected, 'child row is not selected');
+
+        await childRow.checkbox.click();
+
+        assert.ok(childRow.isSelected, 'child row is selected');
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(parentRow.isGroupIndeterminate, 'parent row is indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(parentRow.checkbox.isIndeterminate, 'parent row checkbox is indeterminate');
+      });
+
+      test('Selecting a child of a child row causes the parent checkbox to be indeterminate', async function(assert) {
+        await generateTable(this, { rowCount: 5, rowDepth: 3, checkboxSelectionMode: 'single' });
+
+        let parentRow = table.rows.objectAt(0);
+        let childRow = table.rows.objectAt(1);
+        let grandchildRow = table.rows.objectAt(2);
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(!parentRow.isGroupIndeterminate, 'parent row is not indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(!parentRow.checkbox.isIndeterminate, 'parent row checkbox is not indeterminate');
+
+        assert.ok(!childRow.isSelected, 'child row is not selected');
+        assert.ok(!childRow.isGroupIndeterminate, 'child row is not indeterminate');
+
+        assert.ok(!childRow.checkbox.isChecked, 'child row checkbox is not checked');
+        assert.ok(!childRow.checkbox.isIndeterminate, 'child row checkbox is not indeterminate');
+
+        assert.ok(!grandchildRow.isSelected, 'grandchild row is not selected');
+
+        await grandchildRow.checkbox.click();
+
+        assert.ok(grandchildRow.isSelected, 'grandchild row is selected');
+
+        assert.ok(!parentRow.isSelected, 'parent row is not selected');
+        assert.ok(parentRow.isGroupIndeterminate, 'parent row is indeterminate');
+
+        assert.ok(!parentRow.checkbox.isChecked, 'parent row checkbox is not checked');
+        assert.ok(parentRow.checkbox.isIndeterminate, 'parent row checkbox is indeterminate');
+
+        assert.ok(!childRow.isSelected, 'child row is not selected');
+        assert.ok(childRow.isGroupIndeterminate, 'child row is indeterminate');
+
+        assert.ok(!childRow.checkbox.isChecked, 'child row checkbox is not checked');
+        assert.ok(childRow.checkbox.isIndeterminate, 'child row checkbox is indeterminate');
       });
     });
 
