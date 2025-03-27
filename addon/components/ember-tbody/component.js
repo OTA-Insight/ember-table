@@ -97,6 +97,14 @@ export default Component.extend({
   selectingChildrenSelectsParent: defaultTo(true),
 
   /**
+    When true, this option causes selecting a node to also select all of the node's children.
+
+    @argument selectingParentSelectsChildren
+    @type boolean
+  */
+  selectingParentSelectsChildren: defaultTo(true),
+
+  /**
     The currently selected rows. Can either be an array or an individual row.
 
     @argument selection
@@ -311,6 +319,7 @@ export default Component.extend({
     'selection',
     'selectionMatchFunction',
     'selectingChildrenSelectsParent',
+    'selectingParentSelectsChildren',
     'onSelect',
 
     function() {
@@ -326,6 +335,10 @@ export default Component.extend({
       this.collapseTree.set(
         'selectingChildrenSelectsParent',
         this.get('selectingChildrenSelectsParent')
+      );
+      this.collapseTree.set(
+        'selectingParentSelectsChildren',
+        this.get('selectingParentSelectsChildren')
       );
     }
   ),
