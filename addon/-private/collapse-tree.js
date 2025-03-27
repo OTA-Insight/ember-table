@@ -46,12 +46,13 @@ export const TableRowMeta = EmberObject.extend({
 
   // eslint-disable-next-line ember/use-brace-expansion
   isSelected: computed(
-    '_tree.{selection.[],selectionMatchFunction}',
+    '_tree.{selection.[],selectionMatchFunction,selectingParentSelectsChildren}',
     '_parentMeta.isSelected',
     function() {
       let rowValue = get(this, '_rowValue');
       let selection = get(this, '_tree.selection');
       let selectionMatchFunction = get(this, '_tree.selectionMatchFunction');
+      let selectingParentSelectsChildren = get(this, '_tree.selectingParentSelectsChildren');
 
       if (isArray(selection)) {
         return this.get('isGroupSelected');
@@ -60,7 +61,11 @@ export const TableRowMeta = EmberObject.extend({
       let isRowSelection = selectionMatchFunction
         ? selectionMatchFunction(selection, rowValue)
         : selection === rowValue;
-      return isRowSelection || get(this, '_parentMeta.isSelected');
+
+      // Only consider parent selection if selectingParentSelectsChildren is true
+      let parentIsSelected = selectingParentSelectsChildren && get(this, '_parentMeta.isSelected');
+
+      return isRowSelection || parentIsSelected;
     }
   ),
 
