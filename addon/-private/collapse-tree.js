@@ -209,6 +209,7 @@ export const TableRowMeta = EmberObject.extend({
     let rowIndex = get(this, 'index');
     let isGroupSelected = get(this, 'isGroupSelected');
     let selectingChildrenSelectsParent = get(tree, 'selectingChildrenSelectsParent');
+    let selectingParentSelectsChildren = get(tree, 'selectingParentSelectsChildren');
 
     let rowMetaCache = get(tree, 'rowMetaCache');
 
@@ -244,57 +245,68 @@ export const TableRowMeta = EmberObject.extend({
         selection.add(tree.objectAt(i));
       }
     } else if (toggle) {
-      if (isGroupSelected) {
-        let meta = this;
-        let currentValue = rowValue;
+      // If selectingParentSelectsChildren is false, then we can just toggle
+      // the row. If it is true, then we need to do a bit more work to ensure
+      // that the selection is stable.
+      if (!selectingParentSelectsChildren) {
+        if (isGroupSelected) {
+          selection.delete(rowValue);
+        } else {
+          selection.add(rowValue);
+        }
+      } else {
+        if (isGroupSelected) {
+          let meta = this;
+          let currentValue = rowValue;
 
-        // If the parent is selected all of its children are selected. Since
-        // the current row is going to be removed from the selection, add all
-        // the sibling rows at each level of its grouping to be explicitly
-        // selected so their state remains stable.
-        while (get(meta, '_parentMeta.isSelected')) {
-          meta = get(meta, '_parentMeta');
+          // If the parent is selected all of its children are selected. Since
+          // the current row is going to be removed from the selection, add all
+          // the sibling rows at each level of its grouping to be explicitly
+          // selected so their state remains stable.
+          while (get(meta, '_parentMeta.isSelected')) {
+            meta = get(meta, '_parentMeta');
 
-          // Iterate from the parent meta to the "next" tree node. Since this
-          // is a group it will have at least one child, so there should be at
-          // least one next row to iterate over.
-          let expectedChildDepth = get(meta, 'depth') + 1;
-          let childIndex = get(meta, 'index'); // will be incremented by 1 before use
-          let child;
-          while ((child = tree.objectAt(++childIndex))) {
-            // The currentValue is being toggled, don't add it to the selection
-            if (child === currentValue) {
-              continue;
+            // Iterate from the parent meta to the "next" tree node. Since this
+            // is a group it will have at least one child, so there should be at
+            // least one next row to iterate over.
+            let expectedChildDepth = get(meta, 'depth') + 1;
+            let childIndex = get(meta, 'index'); // will be incremented by 1 before use
+            let child;
+            while ((child = tree.objectAt(++childIndex))) {
+              // The currentValue is being toggled, don't add it to the selection
+              if (child === currentValue) {
+                continue;
+              }
+
+              // If the depth of the row is lower than the expectedChildDepth a
+              // non-child meta has been found (a sibling or something higher.
+              // That means iterating children is complete, so break.
+              //
+              // If the depth is higher than expected then children of a child
+              // group are being iterated. Skip over them, but don't break since
+              // there may be a leaf child after a group child.
+              let childMeta = rowMetaCache.get(child);
+              let childDepth = get(childMeta, 'depth');
+              if (childDepth < expectedChildDepth) {
+                break;
+              }
+              if (childDepth > expectedChildDepth) {
+                continue;
+              }
+
+              // Else, this is a child node which must be explictly selected.
+              // Add it to the list.
+              selection.add(child);
             }
 
-            // If the depth of the row is lower than the expectedChildDepth a
-            // non-child meta has been found (a sibling or something higher.
-            // That means iterating children is complete, so break.
-            //
-            // If the depth is higher than expected then children of a child
-            // group are being iterated. Skip over them, but don't break since
-            // there may be a leaf child after a group child.
-            let childMeta = rowMetaCache.get(child);
-            let childDepth = get(childMeta, 'depth');
-            if (childDepth < expectedChildDepth) {
-              break;
-            }
-            if (childDepth > expectedChildDepth) {
-              continue;
-            }
-
-            // Else, this is a child node which must be explictly selected.
-            // Add it to the list.
-            selection.add(child);
+            selection.delete(currentValue);
+            currentValue = get(meta, '_rowValue');
           }
 
           selection.delete(currentValue);
-          currentValue = get(meta, '_rowValue');
+        } else {
+          selection.add(rowValue);
         }
-
-        selection.delete(currentValue);
-      } else {
-        selection.add(rowValue);
       }
     } else {
       selection.clear();
