@@ -330,17 +330,19 @@ export const TableRowMeta = EmberObject.extend({
       reduceSelectedRows(selection, groupingCounts, rowMetaCache);
     }
 
-    for (let rowMeta of rowMetas) {
-      let rowValue = get(rowMeta, '_rowValue');
-      let parentMeta = get(rowMeta, '_parentMeta');
+    if (selectingParentSelectsChildren) {
+      for (let rowMeta of rowMetas) {
+        let rowValue = get(rowMeta, '_rowValue');
+        let parentMeta = get(rowMeta, '_parentMeta');
 
-      while (parentMeta) {
-        if (selection.has(get(parentMeta, '_rowValue'))) {
-          selection.delete(rowValue);
-          break;
+        while (parentMeta) {
+          if (selection.has(get(parentMeta, '_rowValue'))) {
+            selection.delete(rowValue);
+            break;
+          }
+
+          parentMeta = get(parentMeta, '_parentMeta');
         }
-
-        parentMeta = get(parentMeta, '_parentMeta');
       }
     }
 
