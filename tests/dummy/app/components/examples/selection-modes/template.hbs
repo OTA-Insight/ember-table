@@ -9,6 +9,7 @@
       @rowSelectionMode={{this.rowSelectionMode}}
       @checkboxSelectionMode={{this.checkboxSelectionMode}}
       @selectingChildrenSelectsParent={{this.selectingChildrenSelectsParent}}
+      @selectingParentSelectsChildren={{this.selectingParentSelectsChildren}}
 
       @onSelect={{action (mut demoSelection)}}
       @selection={{this.demoSelection}}
@@ -34,6 +35,10 @@
 <div class="demo-options-group">
   <h4>selectingChildrenSelectsParent</h4>
   <label> <Input @type="checkbox" @checked={{selectingChildrenSelectsParent}} /> </label>
+</div>
+<div class="demo-options-group">
+  <h4>selectingParentSelectsChildren</h4>
+  <label> <Input @type="checkbox" @checked={{selectingParentSelectsChildren}} /> </label>
 </div>
 
 {{! END-SNIPPET }}

@@ -69,6 +69,7 @@ export default Controller.extend({
   rowSelectionMode: 'multiple',
   checkboxSelectionMode: 'multiple',
   selectingChildrenSelectsParent: true,
+  selectingParentSelectsChildren: true,
 
   rowsWithChildren: computed(function() {
     let makeRow = (id, { children } = { children: [] }) => {
