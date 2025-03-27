@@ -840,6 +840,35 @@ module('Integration | selection', () => {
       assert.ok(table.validateSelected(1, 2, 3), 'only children are selected');
     });
 
+    test('selecting the parent selects all children when enabled', async function(assert) {
+      await generateTable(this, {
+        selectingParentSelectsChildren: true,
+        rowCount: 3,
+        rowDepth: 2,
+      });
+
+      assert.ok(table.validateSelected(), 'rows are not selected');
+
+      await table.selectRow(0);
+
+      assert.ok(table.validateSelected(0, 1, 2, 3), 'row and its children are selected');
+    });
+
+    test('selecting the parent does not select all children', async function(assert) {
+      await generateTable(this, {
+        selectingChildrenSelectsParent: false,
+        selectingParentSelectsChildren: false,
+        rowCount: 3,
+        rowDepth: 2,
+      });
+
+      assert.ok(table.validateSelected(), 'rows are not selected');
+
+      await table.selectRow(0);
+
+      assert.ok(table.validateSelected(0), 'only parent is selected');
+    });
+
     test('rows can be selected using selectionMatchFunction', async function(assert) {
       let selection = emberA();
       let rows = [
