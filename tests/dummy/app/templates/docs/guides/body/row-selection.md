@@ -45,7 +45,7 @@ the table.
 
 ## Selection Modes
 
-There are three different properties you can use to control the behavior of
+There are four different properties you can use to control the behavior of
 row selection:
 
 1. `checkboxSelectionMode`: This controls the behavior of the checkbox that
@@ -66,6 +66,9 @@ checkbox will _not_ be checked.
 whether selecting all of the children of a given row also selects the row
 itself.
 
+4. `selectingParentSelectsChildren`: This is a boolean flag that determines
+whether selecting a given row also selects all of its children.
+
 {{#docs-demo as |demo|}}
   {{#demo.example name='selection-modes'}}
     {{examples/selection-modes
@@ -74,6 +77,7 @@ itself.
       rowSelectionMode=this.rowSelectionMode
       checkboxSelectionMode=this.checkboxSelectionMode
       selectingChildrenSelectsParent=this.selectingChildrenSelectsParent
+      selectingParentSelectsChildren=this.selectingParentSelectsChildren
       demoSelection=this.demoSelection}}
   {{/demo.example}}
 
