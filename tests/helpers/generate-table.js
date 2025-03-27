@@ -54,6 +54,7 @@ const fullTable = hbs`
         @idForFirstItem={{this.idForFirstItem}}
         @onSelect={{action this.onSelect}}
         @selectingChildrenSelectsParent={{this.selectingChildrenSelectsParent}}
+        @selectingParentSelectsChildren={{this.selectingParentSelectsChildren}}
         @checkboxSelectionMode={{this.checkboxSelectionMode}}
         @rowSelectionMode={{this.rowSelectionMode}}
         @rowToggleMode={{this.rowToggleMode}}
