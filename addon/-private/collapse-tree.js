@@ -70,12 +70,13 @@ export const TableRowMeta = EmberObject.extend({
   ),
 
   isGroupSelected: computed(
-    '_tree.{selection.[],selectionMatchFunction}',
+    '_tree.{selection.[],selectionMatchFunction,selectingParentSelectsChildren}',
     '_parentMeta.isSelected',
     function() {
       let rowValue = get(this, '_rowValue');
       let selection = get(this, '_tree.selection');
       let selectionMatchFunction = get(this, '_tree.selectionMatchFunction');
+      let selectingParentSelectsChildren = get(this, '_tree.selectingParentSelectsChildren');
 
       if (!selection || !isArray(selection)) {
         return false;
@@ -84,7 +85,12 @@ export const TableRowMeta = EmberObject.extend({
       let isSelectionMatch = selectionMatchFunction
         ? selection.filter(item => selectionMatchFunction(item, rowValue)).length > 0
         : selection.includes(rowValue);
-      return isSelectionMatch || get(this, '_parentMeta.isGroupSelected');
+
+      // Only consider parent selection if selectingParentSelectsChildren is true
+      let parentIsSelected =
+        selectingParentSelectsChildren && get(this, '_parentMeta.isGroupSelected');
+
+      return isSelectionMatch || parentIsSelected;
     }
   ),
 
