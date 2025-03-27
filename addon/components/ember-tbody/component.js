@@ -305,6 +305,14 @@ export default Component.extend({
       'You must create an <EmberThead /> with columns before creating an <EmberTbody />',
       !!this.get('unwrappedApi.columnTree')
     );
+
+    assert(
+      'You cannot set selectingChildrenSelectsParent to true if selectingParentSelectsChildren is false',
+      !(
+        this.get('selectingParentSelectsChildren') === false &&
+        this.get('selectingChildrenSelectsParent') === true
+      )
+    );
   },
 
   _updateDataTestRowCount() {
