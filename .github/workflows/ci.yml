@@ -41,16 +41,21 @@ jobs:
     timeout-minutes: 10
 
     strategy:
+      fail-fast: false
       matrix:
         ember-version:
           [
+            embroider-safe,
+            # embroider-optimized,
             ember-lts-3.12,
             ember-lts-3.20,
             ember-lts-3.24,
             ember-lts-3.28,
             ember-lts-4.4,
             ember-lts-4.12,
-            # ember-release,
+            ember-lts-5.4,
+            ember-lts-5.12,
+            ember-release,
             # ember-production,
             ember-default-docs
           ]

@@ -2,12 +2,12 @@
   <div class="et-cell-container">
     {{#if this.canCollapse}}
       {{#if (has-block "collapse")}}
-        {{yield this.rowMeta (action "onCollapseToggled") to="collapse"}}
+        {{yield this.rowMeta this.onCollapseToggled to="collapse"}}
       {{else}}
         <span class="et-toggle-collapse et-depth-indent {{this.depthClass}}">
           <EmberTableSimpleCheckbox
             @checked={{this.rowMeta.isCollapsed}}
-            @onChange={{action "onCollapseToggled"}}
+            @onChange={{this.onCollapseToggled}}
             @ariaLabel="Collapse row"
             @dataTestCollapseRow={{this.isTesting}}
           />
@@ -20,7 +20,7 @@
 
     {{#if this.canSelect}}
       {{#if (has-block "select")}}
-        {{yield this.rowMeta (action "onSelectionToggled") to="select"}}
+        {{yield this.rowMeta this.onSelectionToggled to="select"}}
       {{else}}
         <span
           class="et-toggle-select {{unless this.shouldShowCheckbox 'et-speech-only'}}"
@@ -29,7 +29,7 @@
           <EmberTableSimpleCheckbox
             @checked={{this.rowMeta.isGroupSelected}}
             @indeterminate={{this.rowMeta.isGroupIndeterminate}}
-            @onClick={{action "onSelectionToggled"}}
+            @onClick={{this.onSelectionToggled}}
             @ariaLabel="Select row"
             @dataTestSelectRow={{this.isTesting}}
           />
